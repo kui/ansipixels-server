@@ -20,12 +20,12 @@ import com.google.common.cache.CacheBuilder;
 
 public class RootServlet extends HttpServlet {
   private static final long serialVersionUID = -6237014533447726392L;
-  private static final String FOOTER = "\nSee http://...\n" +
+  private static final String FOOTER = "\nSee https://kui.github.io/ansi_pixels/\n" +
       "Keiichiro Ui <keiichiro.ui at gmail.com>";
   private static final Logger LOG = LoggerFactory.getLogger(RootServlet.class);
   private static final String PNG_EXT = ".png";
   private static final String HTML_EXT = ".html";
-  private static final String ANSIPIXEL_URL = "http://.../#%s";
+  private static final String ANSIPIXEL_URL = "https://kui.github.io/ansi_pixels/#%s";
 
   private static final Cache<String, BufferedImage> PNG_CACHE = CacheBuilder.newBuilder()
       .maximumSize(300)
