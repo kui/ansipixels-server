@@ -2,6 +2,8 @@ package jp.k_ui.ansipixels;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -45,7 +47,7 @@ public class RootServlet extends HttpServlet {
       if (pathLength > PNG_EXT.length() && path.endsWith(PNG_EXT)) {
         handleAnsiPixelsPng(res, path.substring(1, path.length() - PNG_EXT.length()));
       } else if (pathLength > HTML_EXT.length() && path.endsWith(HTML_EXT)) {
-        handleHtml(res, path.substring(1, path.length() - HTML_EXT.length()));
+        handleHtml(req, res, path.substring(1, path.length() - HTML_EXT.length()));
       } else {
         handleAnsiPixelsText(res, path.substring(1));
       }
@@ -55,18 +57,28 @@ public class RootServlet extends HttpServlet {
     handleRoot(res);
   }
 
-  private void handleHtml(HttpServletResponse res, String base64) throws IOException {
-    String url = String.format(ANSIPIXEL_URL, base64);
+  private void handleHtml(HttpServletRequest req, HttpServletResponse res, String base64)
+      throws IOException {
+    String ansiPixelUrl = String.format(ANSIPIXEL_URL, base64);
+    String pngUrl;
+    try {
+      pngUrl = new URI(req.getRequestURL().toString()).resolve("/" + base64 + ".png").toString();
+    } catch (URISyntaxException e) {
+      handleError(res, "Invalid request URL: " + req.getRequestURL());
+      return;
+    }
+    LOG.debug(pngUrl);
+
     res.setContentType("text/html");
     res.getWriter()
         .append("<title>ANSI Pixels</title>\n")
         .append("<meta property=\"twitter:card\" content=\"photo\">\n")
-        .printf("<meta property=\"twitter:url\" content=\"%s\">\n", url)
-        .printf("<meta property=\"twitter:image\" content=\"/%s.png\">\n", base64)
-        .printf("<meta property=\"og:url\" content=\"%s\" />\n", url)
-        .printf("<meta property=\"og:image\" content=\"/%s.png\">\n", base64)
+        .printf("<meta property=\"twitter:url\" content=\"%s\">\n", ansiPixelUrl)
+        .printf("<meta property=\"twitter:image\" content=\"%s\">\n", pngUrl)
+        .printf("<meta property=\"og:url\" content=\"%s\" />\n", ansiPixelUrl)
+        .printf("<meta property=\"og:image\" content=\"%s\">\n", pngUrl)
         .printf("<meta http-equiv=\"refresh\" content=\"0; %s\">\n", base64)
-        .printf("<p>Redirect to <a href=\"%s\">%s</a>\n", url, url)
+        .printf("<p>Redirect to <a href=\"%s\">%s</a>\n", ansiPixelUrl, ansiPixelUrl)
         .close();
   }
 
