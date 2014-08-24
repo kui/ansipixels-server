@@ -2,8 +2,6 @@ package jp.k_ui.ansipixels;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -25,6 +23,9 @@ public class RootServlet extends HttpServlet {
   private static final String FOOTER = "\nSee http://...\n" +
       "Keiichiro Ui <keiichiro.ui at gmail.com>";
   private static final Logger LOG = LoggerFactory.getLogger(RootServlet.class);
+  private static final String PNG_EXT = ".png";
+  private static final String HTML_EXT = ".html";
+  private static final String ANSIPIXEL_URL = "http://.../#%s";
 
   private static final Cache<String, BufferedImage> PNG_CACHE = CacheBuilder.newBuilder()
       .maximumSize(300)
@@ -41,36 +42,32 @@ public class RootServlet extends HttpServlet {
     String path = req.getRequestURI();
     int pathLength = path.length();
     if (pathLength > 1) {
-      if (pathLength > 4 && path.endsWith(".png")) {
-        handleAnsiPixelsPng(res, path.substring(1, path.length() - 5));
+      if (pathLength > PNG_EXT.length() && path.endsWith(PNG_EXT)) {
+        handleAnsiPixelsPng(res, path.substring(1, path.length() - PNG_EXT.length()));
+      } else if (pathLength > HTML_EXT.length() && path.endsWith(HTML_EXT)) {
+        handleHtml(res, path.substring(1, path.length() - HTML_EXT.length()));
       } else {
         handleAnsiPixelsText(res, path.substring(1));
       }
       return;
     }
 
-    String refString = req.getHeader("referer");
-    if (refString == null) {
-      handleRoot(res);
-      return;
-    }
-
-    URI ref = null;
-    try {
-      ref = new URI(refString);
-    } catch (URISyntaxException e) {
-      handleError(res, "Invalid Refferer URL: " + refString);
-      LOG.debug(e.getMessage(), e);
-      return;
-    }
-
-    String refQuery = ref.getQuery();
-    if (refQuery.length() > 0) {
-      handleAnsiPixelsPng(res, refQuery);
-      return;
-    }
-
     handleRoot(res);
+  }
+
+  private void handleHtml(HttpServletResponse res, String base64) throws IOException {
+    String url = String.format(ANSIPIXEL_URL, base64);
+    res.setContentType("text/html");
+    res.getWriter()
+        .append("<title>ANSI Pixels</title>\n")
+        .append("<meta property=\"twitter:card\" content=\"photo\">\n")
+        .printf("<meta property=\"twitter:url\" content=\"%s\">\n", url)
+        .printf("<meta property=\"twitter:image\" content=\"/%s.png\">\n", base64)
+        .printf("<meta property=\"og:url\" content=\"%s\" />\n", url)
+        .printf("<meta property=\"og:image\" content=\"/%s.png\">\n", base64)
+        .printf("<meta http-equiv=\"refresh\" content=\"0; %s\">\n", base64)
+        .printf("<p>Redirect to <a href=\"%s\">%s</a>\n", url, url)
+        .close();
   }
 
   private void handleAnsiPixelsText(HttpServletResponse res, String base64)
