@@ -77,7 +77,7 @@ public class RootServlet extends HttpServlet {
         .printf("<meta property=\"twitter:image\" content=\"%s\">\n", pngUrl)
         .printf("<meta property=\"og:url\" content=\"%s\" />\n", ansiPixelUrl)
         .printf("<meta property=\"og:image\" content=\"%s\">\n", pngUrl)
-        .printf("<meta http-equiv=\"refresh\" content=\"0; %s\">\n", base64)
+        .printf("<meta http-equiv=\"refresh\" content=\"0; %s\">\n", ansiPixelUrl)
         .printf("<p>Redirect to <a href=\"%s\">%s</a>\n", ansiPixelUrl, ansiPixelUrl)
         .close();
   }
