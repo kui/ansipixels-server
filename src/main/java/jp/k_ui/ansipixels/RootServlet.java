@@ -60,14 +60,14 @@ public class RootServlet extends HttpServlet {
   private void handleHtml(HttpServletRequest req, HttpServletResponse res, String base64)
       throws IOException {
     String ansiPixelUrl = String.format(ANSIPIXEL_URL, base64);
+    String selfUrl = req.getRequestURL().toString();
     String pngUrl;
     try {
-      pngUrl = new URI(req.getRequestURL().toString()).resolve("/" + base64 + ".png").toString();
+      pngUrl = new URI(selfUrl).resolve("/" + base64 + ".png").toString();
     } catch (URISyntaxException e) {
-      handleError(res, "Invalid request URL: " + req.getRequestURL());
+      handleError(res, "Invalid request URL: " + selfUrl);
       return;
     }
-    LOG.debug(pngUrl);
 
     res.setContentType("text/html");
     res.getWriter()
@@ -76,7 +76,7 @@ public class RootServlet extends HttpServlet {
         .append("<meta property=\"twitter:card\" content=\"photo\">\n")
         .printf("<meta property=\"twitter:url\" content=\"%s\">\n", ansiPixelUrl)
         .printf("<meta property=\"twitter:image\" content=\"%s\">\n", pngUrl)
-        .printf("<meta property=\"og:url\" content=\"%s\" />\n", ansiPixelUrl)
+        .printf("<meta property=\"og:url\" content=\"%s\" />\n", selfUrl)
         .printf("<meta property=\"og:image\" content=\"%s\">\n", pngUrl)
         .printf("<meta http-equiv=\"refresh\" content=\"0; %s\">\n", ansiPixelUrl)
         .append("</head><body>\n")
