@@ -71,17 +71,15 @@ public class RootServlet extends HttpServlet {
 
     res.setContentType("text/html");
     res.getWriter()
-        .append("<html><head>")
         .append("<title>ANSI Pixels</title>\n")
-        .append("<meta property=\"twitter:card\" content=\"photo\">\n")
-        .printf("<meta property=\"twitter:url\" content=\"%s\">\n", ansiPixelUrl)
-        .printf("<meta property=\"twitter:image\" content=\"%s\">\n", pngUrl)
+        .append("<meta name=\"twitter:card\" content=\"photo\">\n")
+        .append("<meta name=\"twitter:site\" content=\"@k_ui\">\n")
+        .printf("<meta name=\"twitter:image:src\" content=\"%s\">\n", pngUrl)
+        .printf("<meta name=\"twitter:url\" content=\"%s\">\n", ansiPixelUrl)
         .printf("<meta property=\"og:url\" content=\"%s\" />\n", selfUrl)
         .printf("<meta property=\"og:image\" content=\"%s\">\n", pngUrl)
         .printf("<meta http-equiv=\"refresh\" content=\"0; %s\">\n", ansiPixelUrl)
-        .append("</head><body>\n")
         .printf("<p>Redirect to <a href=\"%s\">%s</a>\n", ansiPixelUrl, ansiPixelUrl)
-        .append("</body></html>\n")
         .close();
   }
 
