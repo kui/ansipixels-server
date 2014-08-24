@@ -76,6 +76,7 @@ public class RootServlet extends HttpServlet {
         .append("<meta name=\"twitter:site\" content=\"@k_ui\">\n")
         .printf("<meta name=\"twitter:image:src\" content=\"%s\">\n", pngUrl)
         .printf("<meta name=\"twitter:url\" content=\"%s\">\n", ansiPixelUrl)
+        .append("<meta property=\"og:type\" content=\"object\" />\n")
         .printf("<meta property=\"og:url\" content=\"%s\" />\n", selfUrl)
         .printf("<meta property=\"og:image\" content=\"%s\">\n", pngUrl)
         .printf("<meta http-equiv=\"refresh\" content=\"0; %s\">\n", ansiPixelUrl)
