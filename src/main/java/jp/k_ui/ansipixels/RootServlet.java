@@ -131,7 +131,7 @@ public class RootServlet extends HttpServlet {
       return;
     }
 
-    BufferedImage img = p.toImageWithLongSide(280);
+    BufferedImage img = p.toImageWithLongSide(435);
     PNG_CACHE.put(base64, img);
     handleImage(res, img);
   }
