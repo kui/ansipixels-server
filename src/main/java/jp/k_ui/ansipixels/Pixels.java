@@ -26,7 +26,7 @@ public class Pixels {
   private final static String ANSI_COLOR_RESET_CODE = "\u001b[0m";
   private final static ImmutableList<String> ANSI_COLOR_CODES = generateAnsiColorCodes();
   private final static ImmutableList<Color> ANSI_COLORS = generateColors();
-  private final static Color TRANSPARENT_COLOR = new Color(0, 0, 0, 0);
+  private final static Color DEFAULT_COLOR = new Color(51, 51, 51, 1);
 
   final private List<List<Integer>> rows;
 
@@ -122,7 +122,7 @@ public class Pixels {
     }
     int width = getWidth() * pixelSize;
     int height = getHeight() * pixelSize;
-    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+    BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
     Graphics2D g = image.createGraphics();
     drawPixels(pixelSize, g);
     image.flush();
@@ -141,7 +141,7 @@ public class Pixels {
       for (int x = 0; x < xmax; x++) {
         int offsetX = x * pixelSize;
         Integer code = row.get(x);
-        g.setColor((code == null) ? TRANSPARENT_COLOR : ANSI_COLORS.get(code));
+        g.setColor((code == null) ? DEFAULT_COLOR : ANSI_COLORS.get(code));
         g.fillRect(offsetX, offsetY, pixelSize, pixelSize);
       }
     }
