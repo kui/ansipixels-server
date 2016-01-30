@@ -15,7 +15,7 @@ import java.util.zip.InflaterOutputStream;
 public class DecodeUtils {
     public static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     public static ObjectReader LIST_LIST_INT_READER =
-            OBJECT_MAPPER.reader(new TypeReference<List<List<Integer>>>() {
+            OBJECT_MAPPER.readerFor(new TypeReference<List<List<Integer>>>() {
             });
 
     public static byte[] convertToBytesFromBase64(String base64) {
