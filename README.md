@@ -16,7 +16,9 @@ Installation
 In terminal:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~bash
-$ sudo ./scripts/install.sh
+$ ./scripts/gen-init.sh | sudo tee /etc/init.d/ansipixels
+$ sudo chmod +x /etc/init.d/ansipixels
+$ service ansipixels start
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
