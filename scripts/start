@@ -1,0 +1,28 @@
+#!/bin/bash
+set -eu
+cd "$(dirname "$0")/.."
+. scripts/common.sh
+
+if is_running; then
+    abort "Already running"
+fi
+
+logdir="$(dirname $STDOUT_LOG)"
+if [[ "$logdir" != "." && "$logdir" != "/" ]]; then
+    mkdir -p "$logdir"
+fi
+logdir="$(dirname $STDERR_LOG)"
+if [[ "$logdir" != "." && "$logdir" != "/" ]]; then
+    mkdir -p "$logdir"
+fi
+
+opts="-Dexec.mainClass=${MAIN_CLASS}"
+opts="$opts -Dlog.level=${LOG_LEVEL}"
+opts="$opts -Dport=${PORT}"
+
+nohup $MVNW exec:java $opts 2>"$STDERR_LOG" >"$STDOUT_LOG" &
+echo $! > "$PID_FILE"
+
+sleep 0.5
+
+wait_starting

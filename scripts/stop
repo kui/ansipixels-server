@@ -1,0 +1,27 @@
+#!/bin/bash
+set -eu
+cd "$(dirname "$0")/.."
+. scripts/common.sh
+
+if ! is_running; then
+    abort "Not Running"
+fi
+
+kill -TERM $(pid)
+
+sleep 0.5
+
+# wait killing
+c=20
+while is_running; do
+    echo -n .
+    sleep 1
+    c=$((c-1))
+
+    if [ $c == 0 ]; then
+        abort "Timeout to wait killing"
+    fi
+done
+echo
+
+rm -f "$PID_FILE"

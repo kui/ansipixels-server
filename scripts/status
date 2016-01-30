@@ -1,0 +1,9 @@
+#!/bin/bash
+set -eu
+cd "$(dirname "$0")/.."
+. scripts/common.sh
+
+if is_running
+then echo "running (pid: $(pid))"
+else echo "not running"
+fi
