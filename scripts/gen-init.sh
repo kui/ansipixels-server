@@ -48,6 +48,9 @@ case "\$1" in
         sudo -u$user "\${dir}/scripts/stop"
         sudo -u$user "\${dir}/scripts/start"
         ;;
+    update)
+        cd "\${dir}"
+        sudo -u$user git pull
     *)
         usage;;
 esac
