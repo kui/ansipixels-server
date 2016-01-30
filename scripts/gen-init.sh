@@ -51,6 +51,8 @@ case "\$1" in
     update)
         cd "\${dir}"
         sudo -u$user git pull
+        sudo -u$user ./mvnw compile
+        ;;
     *)
         usage;;
 esac
