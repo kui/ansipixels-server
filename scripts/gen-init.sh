@@ -30,7 +30,7 @@ cat <<EOF
 dir=$project_dir
 
 usage() {
-    echo "Usage: \$0 {start|stop|status}"
+    echo "Usage: \$0 {start|stop|restart|status}"
 }
 
 set -eu
@@ -42,7 +42,12 @@ fi
 
 case "\$1" in
     start|stop|status)
-        sudo -u$user "\${dir}/scripts/\$1";;
+        sudo -u$user "\${dir}/scripts/\$1"
+        ;;
+    restart)
+        sudo -u$user "\${dir}/scripts/stop"
+        sudo -u$user "\${dir}/scripts/start"
+        ;;
     *)
         usage;;
 esac
