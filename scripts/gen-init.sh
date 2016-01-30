@@ -30,7 +30,7 @@ cat <<EOF
 dir=$project_dir
 
 usage() {
-    echo "Usage: \$0 {start|stop|restart|status}"
+    echo "Usage: \$0 {start|stop|restart|status|update}"
 }
 
 set -eu
