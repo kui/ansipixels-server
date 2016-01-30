@@ -8,8 +8,7 @@ import org.eclipse.jetty.servlet.ServletHandler;
 
 public class Main {
   public static void main(String[] args) throws Exception {
-    String portProp = System.getenv("PORT");
-    int port = (portProp == null) ? 8080 : Integer.parseInt(portProp, 10);
+    int port = Integer.parseInt(System.getProperty("port", "8080"), 10);
 
     HandlerCollection handler = new HandlerCollection();
 
