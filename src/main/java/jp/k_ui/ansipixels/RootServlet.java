@@ -41,6 +41,7 @@ public class RootServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse res)
       throws ServletException, IOException {
+    res.setCharacterEncoding(StandardCharsets.UTF_8.name());
     String path = req.getRequestURI();
     int pathLength = path.length();
     if (pathLength > 1) {
