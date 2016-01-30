@@ -27,7 +27,7 @@ abort() {
 }
 
 wait_starting() {
-    c=20
+    c=60
     while is_running && ! check_service; do
         echo -n .
         sleep 1
